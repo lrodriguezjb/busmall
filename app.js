@@ -14,7 +14,7 @@ var containerEl = document.getElementById('image_container');
 // rightImageEl.title = 'boots.jpg';
 // eslint-disable-next-line no-unused-vars
 var voteCounter = 0;
-
+var turnCount = 0;
 var allProducts = [];
 function Product(name) {
   this.name = name;
@@ -42,12 +42,12 @@ function renderProducts() {
     uniquePicsArray[1] = makeRandom();
   }
 
-  if (uniquePicsArray[0] === uniquePicsArray[2]) {
+  while (uniquePicsArray[0] === uniquePicsArray[2]) {
     console.error('Duplicate found, Re-Rolling! 2');
     uniquePicsArray[2] = makeRandom();
   }
 
-  if (uniquePicsArray[1] === uniquePicsArray[2]) {
+  while (uniquePicsArray[1] === uniquePicsArray[2]) {
     console.error('Duplicate found, Re-Rolling! 3');
     uniquePicsArray[2] = makeRandom();
   }
@@ -96,19 +96,26 @@ new Product('wine-glass');
 
 function handleClick() {
   var chosenImage = event.target.title;
+  turnCount ++;
   console.log('chosenImage: ', chosenImage);
   for( var i = 0; i < allProducts.length; i++ ) {
     if(allProducts[i].name === chosenImage) {
       allProducts[i].votes++;
-      voteCounter++;
       if(voteCounter === 3) {
-        alert(`Maximum Votes Reached the Results are Bag:${allProducts[0].votes} Handle:${allProducts[0].votes}`);
-        break;
+        containerEl.removeEventListener('click', handleClick, true);
+      }
+      while (turnCount === 25) {
+        containerEl.removeEventListener('click', handleClick, true);
       }
     }
+
   }
 
+
   renderProducts();
+  listEl.innerHTML = '';
+  render();
+  voteCounter++;
 }
 
 while(allProducts.votes === 3 ) {
@@ -122,3 +129,17 @@ containerEl.addEventListener('click', handleClick);
 renderProducts();
 
 
+
+var listEl = document.getElementById('list');
+var listchild = document.createElement('h1');
+listchild.textContent = 'Stats' ;
+listEl.appendChild.listchild;
+function render() {
+  for (var i=0; i < allProducts.length; i++) {
+    var listchild = document.createElement('li');
+    listchild.textContent = `Product: ${allProducts[i].name} Views: ${allProducts[i].views} Votes ${allProducts[i].votes}`;
+    listEl.appendChild(listchild);
+  }
+}
+
+render();
